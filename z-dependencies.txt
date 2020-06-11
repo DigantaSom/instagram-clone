@@ -1,0 +1,2 @@
+--- Backend --- (root folder)
+npm i express config mongoose express-validator bcryptjs jsonwebtoken concurrently
