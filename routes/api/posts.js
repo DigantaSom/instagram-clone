@@ -1,18 +1,57 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-const config = require('config');
 const auth = require('../../middleware/check-auth');
 
 const Post = require('../../models/Post');
-const User = require('../../models/User');
+
+// @route		POST /api/posts/
+// @desc		Create a post
+// @access	  Private
+router.post(
+    '/',
+    // [auth, [check('photo', 'Photo is required').not().isEmpty()]],
+    auth,
+    async (req, res) => {
+        // const errors = validationResult(req);
+        // if (!errors.isEmpty()) {
+        //     return res.status(400).json({
+        //         errors: errors.array(),
+        //     });
+        // }
+
+        const file = req.files.photo;
+
+        file.mv(`${__dirname}/../../client/public/uploads/${file.name}`, async err => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send(err);
+            }
+            // res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+            const filePath = `/uploads/${file.name}`;
+            try {
+                const newPost = new Post({
+                    user: req.user.id,
+                    caption: req.body.caption,
+                    photo: filePath,
+                });
+
+                const post = await newPost.save();
+                res.json(post);
+            } catch (err) {
+                console.error(err.message);
+                res.status(500).send('Server Error');
+            }
+        });
+    }
+);
 
 // @route		GET /api/posts
 // @desc		Get all posts
 // @access	  Public
 router.get('/', async (req, res) => {
     try {
-        const posts = await Post.find().populate('user', ['username', 'dp']);
+        const posts = await Post.find().populate('user', ['username', 'dp']).sort({ date: -1 });
         res.status(200).json(posts);
     } catch (err) {
         console.error(err);
@@ -20,54 +59,16 @@ router.get('/', async (req, res) => {
     }
 });
 
-// @route		POST /api/post
-// @desc		Create a post
-// @access	  Private
-router.post(
-    '/',
-    [
-        auth,
-        [
-            check('title', 'Title is required').not().isEmpty(),
-            check('body', 'Body is required').not().isEmpty(),
-        ],
-    ],
-    async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({
-                errors: errors.array(),
-            });
-        }
-
-        const { title, body, photo } = req.body;
-        try {
-            const newPost = new Post({
-                user: req.user.id,
-                title,
-                body,
-                photo,
-            });
-
-            const post = await newPost.save();
-            res.json(post);
-        } catch (err) {
-            console.error(err.message);
-            res.status(500).send('Server Error');
-        }
-    }
-);
-
 // @route		GET /api/posts/:user_id
 // @desc		Get all posts of a user by user_id
 // @access	  Public
 router.get('/:user_id', async (req, res) => {
     try {
-        const post = await Post.findOne({
+        const posts = await Post.find({
             user: req.params.user_id,
-        }).populate('user', ['name', 'username', 'dp', 'followers', 'following']);
+        }).sort({ date: -1 });
 
-        res.status(200).json(post);
+        res.status(200).json(posts);
     } catch (error) {
         console.error(err.message);
         res.status(500).send('Server Error');

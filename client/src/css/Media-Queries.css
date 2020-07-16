@@ -1,0 +1,87 @@
+@media screen and (max-width: 1470px) {
+  /* ------------------------ Login & Register ------------------------ */
+  .login-left,
+  .login-right {
+    width: 350px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+    max-width: 80%;
+    margin: 1.5rem auto;
+  }
+  /* ------------------------ Login & Register ------------------------ */
+  .login-left {
+    display: none;
+  }
+  .login-right {
+    width: 70%;
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .container {
+    max-width: 85%;
+    margin: 1.5rem auto;
+  }
+  /* ------------------------ Login & Register ------------------------ */
+  .login-right {
+    width: 80%;
+  }
+  /* ------------------------ Profile ------------------------ */
+  .profile-top {
+    margin: 2rem auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* ------------------------ General ------------------------ */
+  .container {
+    max-width: 70%;
+    margin: 2rem auto;
+  }
+  .card {
+    margin: 1.2rem 0;
+  }
+  .comment-input {
+    padding: 0.45rem;
+    margin: 0.5rem;
+  }
+  /* ------------------------ Navbar ------------------------ */
+  .search-container {
+    display: none;
+  }
+  /* ------------------------ Profile ------------------------ */
+  .profile-top {
+    flex-direction: column;
+  }
+  .profile-dp-container {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  /* ------------------------ General ------------------------ */
+  .container {
+    max-width: 90%;
+    margin: 1.4rem auto;
+  }
+  /* ------------------------ Profile ------------------------ */
+  /* .profile-top {
+        margin: 2rem -5rem;
+    } */
+  .profile-dp-container {
+    width: 115px;
+    height: 115px;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  /* ---------------------------------------------------- User Posts ---------------------------------------------------- */
+  .userpost-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
