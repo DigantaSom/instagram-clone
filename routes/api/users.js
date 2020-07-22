@@ -138,7 +138,7 @@ router.delete('/', auth, async (req, res) => {
 
 // @route       PUT /api/users/follow
 // @desc        Follow a user
-// @access    Private
+// @access      Private
 router.put('/follow', auth, async (req, res) => {
   const followId = req.body.followId;
   if (!followId) {
@@ -152,7 +152,7 @@ router.put('/follow', auth, async (req, res) => {
         msg: 'You cannot follow or unfollow yourself',
       });
     } else {
-      await User.findByIdAndUpdate(
+      const followingUser = await User.findByIdAndUpdate(
         followId,
         {
           $addToSet: { followers: req.user.id }, // $addToSet only allows unique values to be entered
@@ -168,7 +168,7 @@ router.put('/follow', auth, async (req, res) => {
         { new: true }
       ).select('-password');
 
-      res.status(200).json(followerUser);
+      res.status(200).json(followingUser);
     }
   } catch (err) {
     console.error(err.message);
@@ -176,11 +176,9 @@ router.put('/follow', auth, async (req, res) => {
   }
 });
 
-// below unfollow route needs fixing!!!!!!
-
 // @route       PUT /api/users/unfollow
 // @desc        Unfollow a user
-// @access    Private
+// @access      Private
 router.put('/unfollow', auth, async (req, res) => {
   const unfollowId = req.body.unfollowId;
   if (!unfollowId) {
@@ -201,10 +199,10 @@ router.put('/unfollow', auth, async (req, res) => {
         $pull: { following: unfollowId },
       }).select('-password');
 
-      // res.status(200).json(unfollowerUser);
-      res.status(200).json({
-        msg: 'Unfollow successful',
-      });
+      res.status(200).json(unfollowerUser);
+      // res.status(200).json({
+      //   msg: 'Unfollow successful',
+      // });
     }
   } catch (err) {
     console.error(err.message);

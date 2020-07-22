@@ -8,7 +8,9 @@ export const REGISTER_FAIL = 'REGISTER_FAIL';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const UPDATE_USER = 'UPDATE_USER'; // to add or update bio or follow/unfollow or update whole user info
-// export const USER_ERROR = 'USER_ERROR';
+export const FOLLOW = 'FOLLOW';
+export const UNFOLLOW = 'UNFOLLOW';
+export const USER_ERROR = 'USER_ERROR';
 
 export const GET_POSTS = 'GET_POSTS';
 export const GET_POSTS_OF_USER = 'GET_POSTS_OF_USER';

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { GET_USER_INFO, UPDATE_USER, POST_ERROR } from './type';
+import { GET_USER_INFO, UPDATE_USER, POST_ERROR, FOLLOW, UNFOLLOW } from './type';
 import { setAlert } from './alert';
+import { loadUser } from './auth';
 
 // Get public user info by user_id
 export const getUserInfo = user_id => async dispatch => {
@@ -63,13 +64,47 @@ export const followUser = followId => async dispatch => {
   try {
     const res = await axios.put('/api/users/follow', body, config);
     dispatch({
-      type: UPDATE_USER,
-      payload: res.data,
+      type: FOLLOW,
+      payload: res.data.followers,
     });
+    dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 6000)));
     }
+    // dispatch({
+    //   type: USER_ERROR,
+    // });
+  }
+};
+
+// Unfollow a user
+export const unfollowUser = unfollowId => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  const body = JSON.stringify({ unfollowId });
+  try {
+    const res = await axios.put('/api/users/unfollow', body, config);
+    // dispatch({
+    //   type: FOLLOW_UNFOLLOW,
+    //   payload: res.data.followers,
+    // });
+    dispatch({
+      type: UNFOLLOW,
+      payload: res.data.followers,
+    });
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 6000)));
+    }
+    // dispatch({
+    //   type: USER_ERROR,
+    // });
   }
 };

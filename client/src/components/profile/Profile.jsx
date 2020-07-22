@@ -1,6 +1,5 @@
-import React, { useEffect, Fragment, useState } from 'react';
+import React, { useEffect, useCallback, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 // components
 import Loader from '../layout/Loader';
 import no_dp from '../../img/no_dp.jpg';
@@ -8,7 +7,8 @@ import ProfilePosts from './ProfilePosts';
 // Redux
 import { connect } from 'react-redux';
 import { getPostsOfUser } from '../../redux/actions/post';
-import { getUserInfo, addOrUpdateBio } from '../../redux/actions/user';
+import { loadUser } from '../../redux/actions/auth';
+import { getUserInfo, followUser, unfollowUser } from '../../redux/actions/user';
 
 const Profile = ({
   getUserInfo,
@@ -17,11 +17,11 @@ const Profile = ({
   user: { _id, name, username, followers, following, bio },
   post: { loading, userPosts },
   auth,
-  addOrUpdateBio,
-  history,
+  loadUser,
+  followUser,
+  unfollowUser,
 }) => {
-  const [bioText, setBioText] = useState('');
-  const [showAddBioPopup, toggleAddBioPopup] = useState(false);
+  // const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     getUserInfo(match.params.user_id);
@@ -33,10 +33,12 @@ const Profile = ({
 
   // console.log(publicUserInfo);
 
-  const handleSubmitBio = () => {
-    addOrUpdateBio({ bioText }, match.params.id, history); // edit = false
-    setBioText('');
-    toggleAddBioPopup(false);
+  const followUserHandler = followId => {
+    followUser(followId);
+  };
+
+  const unfollowUserHandler = unfollowId => {
+    unfollowUser(unfollowId);
   };
 
   return loading ? (
@@ -56,16 +58,29 @@ const Profile = ({
               <Fragment>
                 <button className='btn edit-profile-btn'>Edit Profile</button>
                 <button className='settings-btn'>
-                  <i class='fas fa-cog'></i>
+                  <i className='fas fa-cog'></i>
                 </button>
               </Fragment>
             ) : (
               // check whether following or not and do stuffs acc. to that.
               <div className='follow-section'>
                 {auth.isAuthenticated && auth.user.following.find(f => f === _id) ? (
-                  <button className='btn following-btn'>Following</button>
+                  <button
+                    className='btn following-btn'
+                    onClick={() => unfollowUserHandler(_id)}>
+                    Following
+                  </button>
                 ) : (
-                  <button className='btn follow-btn'>Follow</button>
+                  <Fragment>
+                    <button
+                      className='btn follow-btn'
+                      onClick={() => followUserHandler(_id)}>
+                      {/* {following && following.some(f => f === auth.user._id)
+                        ? 'Follow Back'
+                        : 'Follow'} */}
+                      Follow
+                    </button>
+                  </Fragment>
                 )}
                 <div className='profile-options-btn'>
                   <i className='fas fa-ellipsis-h'></i>
@@ -90,40 +105,10 @@ const Profile = ({
           </div>
           <div className='profile-info-desc'>
             <h3>{name}</h3>
-            {bio ? (
-              <p>{bio}</p>
-            ) : (
-              auth.isAuthenticated &&
-              auth.user._id === _id && (
-                <div style={{ marginTop: '0.5rem' }}>
-                  <button
-                    className='btn btn-primary'
-                    onClick={() => toggleAddBioPopup(!showAddBioPopup)}>
-                    Add a Bio
-                  </button>
-                </div>
-              )
-            )}
+            {bio && <p>{bio}</p>}
           </div>
         </div>
       </div>
-      {/* Add Bio Pop-up */}
-      {showAddBioPopup && (
-        <div className='add-bio-popup'>
-          <div className='add-bio-input'>
-            <textarea
-              type='text'
-              placeholder='Write something...'
-              value={bioText}
-              onChange={e => setBioText(e.target.value)}></textarea>
-          </div>
-          <div className='add-bio-btn-container'>
-            <button type='submit' className='btn btn-primary' onClick={handleSubmitBio}>
-              Add Bio
-            </button>
-          </div>
-        </div>
-      )}
       <div className='divider'></div>
       <ProfilePosts posts={userPosts} />
     </Fragment>
@@ -136,7 +121,9 @@ Profile.propTypes = {
   user: PropTypes.object.isRequired,
   post: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  addOrUpdateBio: PropTypes.func.isRequired,
+  loadUser: PropTypes.func.isRequired,
+  followUser: PropTypes.func.isRequired,
+  unfollowUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -145,6 +132,10 @@ const mapStateToProps = state => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { getUserInfo, getPostsOfUser, addOrUpdateBio })(
-  withRouter(Profile)
-);
+export default connect(mapStateToProps, {
+  getUserInfo,
+  getPostsOfUser,
+  loadUser,
+  followUser,
+  unfollowUser,
+})(Profile);
