@@ -17,8 +17,7 @@ body {
   --success-color: #28a745;
 }
 
-/* ---------------------------------------------------- General ---------------------------------------------------- */
-
+/* --------------------- General --------------------- */
 .container {
   max-width: 55%;
   margin: 2rem auto;
@@ -32,6 +31,14 @@ body {
 .link-black {
   color: #111;
   text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.red-text {
+  color: red;
 }
 
 .my-1 {
@@ -151,7 +158,7 @@ input {
   margin: 1.6rem 0.5rem;
 }
 
-/* ---------------------------------------------------- Login & Register ---------------------------------------------------- */
+/* ---------------------- Login & Register ---------------------- */
 
 .auth-container {
   display: flex;
@@ -184,7 +191,7 @@ input {
   padding: 2.5rem;
 }
 
-/* ---------------------------------------------------- Navbar ---------------------------------------------------- */
+/* --------------------- Navbar --------------------- */
 nav {
   display: flex;
   flex-wrap: wrap;
@@ -193,8 +200,11 @@ nav {
   padding: 0.6rem 15%;
   background-color: #fff;
   border-bottom: 1px solid #ccc;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
-
 .nav-utils {
   /* border: 1px solid #111; */
   display: flex;
@@ -203,8 +213,61 @@ nav {
   width: 20%;
   padding: 0.4rem;
 }
+.profile-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 25px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.profile-logo img {
+  width: 100%;
+  height: 100%;
+}
+.profile-logo-menu {
+  position: fixed;
+  top: 4rem;
+  background: #fff;
+  /* padding: 1rem 2rem; */
+  z-index: 1;
+  box-shadow: 5px 6px 8px rgba(0, 0, 0, 0.6);
+  width: 200px;
+}
+.profile-logo-menu-item {
+  padding: 0.6rem;
+  cursor: pointer;
+}
+.profile-logo-menu-item:hover {
+  background-color: whitesmoke;
+}
 
-/* ---------------------------------------------------- Post Item ---------------------------------------------------- */
+/* ---------------------- Post Item ---------------------- */
+
+.post-options-menu {
+  background-color: white;
+  position: fixed;
+  top: 11rem;
+  left: 50%;
+  width: 50%;
+  margin-left: -25%;
+  z-index: 10;
+  box-shadow: 3px 5px 8px 8px rgba(0, 0, 0, 0.7);
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+.post-options-menu-item:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+.post-options-menu-item {
+  padding: 0.8rem 0;
+  text-align: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.post-options-menu-item:hover {
+  background-color: #f3f3f3;
+}
+
 .post-top {
   display: flex;
   justify-content: space-between;
@@ -212,12 +275,10 @@ nav {
   padding: 0.8rem;
   border-bottom: 1px solid #ccc;
 }
-
 .post-top-left {
   display: flex;
   align-items: center;
 }
-
 .post-dp-container {
   width: 30px;
   height: 30px;
@@ -225,17 +286,14 @@ nav {
   overflow: hidden; /* to make border-radius working */
   margin-right: 0.8rem;
 }
-
 .post-dp-container img {
   width: 100%;
   height: 100%;
 }
-
 .post-username {
   font-weight: bold;
   font-size: 1.1rem;
 }
-
 .options {
   cursor: pointer;
 }
@@ -244,7 +302,6 @@ nav {
   width: 100%;
   height: auto;
 }
-
 .post-img img {
   width: 100%;
   height: 100%;
@@ -254,11 +311,13 @@ nav {
   padding: 0.8rem;
   border-bottom: 1px solid #ccc;
 }
-
 .body-username {
   font-weight: bold;
 }
-
+.num-of-likes {
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+}
 .post-body-date {
   color: #b5b5b5;
   padding-top: 0.5rem;
@@ -266,26 +325,24 @@ nav {
 
 .like-comment-buttons {
   padding-bottom: 0.8rem;
+  display: flex;
 }
-
 .fa-heart {
   padding-right: 1rem;
 }
-
 .fa-heart,
 .fa-comment {
   color: white;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: black;
-  font-size: 1.3rem;
+  font-size: 1.45rem;
   cursor: pointer;
 }
-
-/* when click like button */
-/*.fa-heart {
-    color: red;
-    -webkit-text-stroke-width: 1px;
-} */
+/* when like a post */
+.postLiked {
+  color: red;
+  -webkit-text-stroke-width: 1px;
+}
 
 .add-comment {
   display: flex;
@@ -306,7 +363,7 @@ nav {
   color: var(--primary-color);
 }
 
-/* ---------------------------------------------------- Profile ---------------------------------------------------- */
+/* ----------------------- Profile ----------------------- */
 .profile-top {
   display: flex;
   justify-content: space-around;
@@ -407,7 +464,7 @@ nav {
   font-size: 1.18rem;
 }
 
-/* ---------------------------------------------------- User Posts ---------------------------------------------------- */
+/* --------------------- User Posts --------------------- */
 .userpost-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

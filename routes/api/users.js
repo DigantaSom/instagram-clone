@@ -200,9 +200,6 @@ router.put('/unfollow', auth, async (req, res) => {
       }).select('-password');
 
       res.status(200).json(unfollowerUser);
-      // res.status(200).json({
-      //   msg: 'Unfollow successful',
-      // });
     }
   } catch (err) {
     console.error(err.message);

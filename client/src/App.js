@@ -19,31 +19,35 @@ import CreatePost from './components/post-forms/CreatePost';
 import Profile from './components/profile/Profile';
 
 if (localStorage.token) {
-    setAuthToken(localStorage.token);
+  setAuthToken(localStorage.token);
 }
 
 const App = () => {
-    useEffect(() => {
-        store.dispatch(loadUser());
-    }, []);
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
 
-    return (
-        <Provider store={store}>
-            <Router>
-                <Navbar />
-                <section className='container'>
-                    <Alert />
-                    <PrivateRoute exact path='/' component={Landing} />
-                    <Switch>
-                        <Route path='/login' component={Login} />
-                        <Route path='/register' component={Register} />
-                        <PrivateRoute path='/create-post' component={CreatePost} />
-                        <PrivateRoute path='/:user_id' component={Profile} />
-                    </Switch>
-                </section>
-            </Router>
-        </Provider>
-    );
+  return (
+    <Provider store={store}>
+      <Router>
+        <Navbar />
+        <br />
+        <br />
+        <br />
+        <br />
+        <section className='container'>
+          <Alert />
+          <PrivateRoute exact path='/' component={Landing} />
+          <Switch>
+            <Route path='/login' component={Login} />
+            <Route path='/register' component={Register} />
+            <PrivateRoute path='/create-post' component={CreatePost} />
+            <PrivateRoute path='/:user_id' component={Profile} />
+          </Switch>
+        </section>
+      </Router>
+    </Provider>
+  );
 };
 
 export default App;

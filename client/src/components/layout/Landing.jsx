@@ -2,26 +2,26 @@ import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 // Redux
 import { connect } from 'react-redux';
-import { getPosts } from '../../redux/actions/post';
+import { getPostsOfMeAndWhomImFollowing } from '../../redux/actions/post';
 // components
 import Posts from '../posts/Posts';
 
-const Landing = ({ getPosts }) => {
-    useEffect(() => {
-        getPosts();
-    }, [getPosts]);
+const Landing = ({ getPostsOfMeAndWhomImFollowing }) => {
+  useEffect(() => {
+    getPostsOfMeAndWhomImFollowing();
+  }, [getPostsOfMeAndWhomImFollowing]);
 
-    return (
-        <Fragment>
-            <Posts />
-        </Fragment>
-    );
+  return (
+    <Fragment>
+      <Posts />
+    </Fragment>
+  );
 };
 
 Landing.propTypes = {
-    getPosts: PropTypes.func.isRequired,
+  getPostsOfMeAndWhomImFollowing: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
+// const mapStateToProps = state => ({});
 
-export default connect(mapStateToProps, { getPosts })(Landing);
+export default connect(null, { getPostsOfMeAndWhomImFollowing })(Landing);

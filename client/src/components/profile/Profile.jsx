@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 // components
 import Loader from '../layout/Loader';
@@ -21,8 +21,6 @@ const Profile = ({
   followUser,
   unfollowUser,
 }) => {
-  // const [isFollowing, setIsFollowing] = useState(false);
-
   useEffect(() => {
     getUserInfo(match.params.user_id);
   }, [getUserInfo, match.params.user_id]);
@@ -75,10 +73,9 @@ const Profile = ({
                     <button
                       className='btn follow-btn'
                       onClick={() => followUserHandler(_id)}>
-                      {/* {following && following.some(f => f === auth.user._id)
+                      {following && following.some(f => f === auth.user._id)
                         ? 'Follow Back'
-                        : 'Follow'} */}
-                      Follow
+                        : 'Follow'}
                     </button>
                   </Fragment>
                 )}

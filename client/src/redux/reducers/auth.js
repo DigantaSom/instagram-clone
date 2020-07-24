@@ -5,6 +5,7 @@ import {
   LOGIN_FAIL,
   USER_LOADED,
   AUTH_ERROR,
+  LOGOUT,
   // FOLLOW
 } from '../actions/type';
 
@@ -38,6 +39,7 @@ export default (state = initialState, { type, payload }) => {
     case REGISTER_FAIL:
     case LOGIN_FAIL:
     case AUTH_ERROR:
+    case LOGOUT:
       localStorage.removeItem('token');
       return {
         ...state,
@@ -45,15 +47,6 @@ export default (state = initialState, { type, payload }) => {
         isAuthenticated: false,
         loading: false,
       };
-
-    // case FOLLOW:
-    //   return {
-    //     ...state,
-    //     user: {
-    //       ...state.user,
-    //       followers: followers.concat(),
-    //     },
-    //   };
 
     default:
       return state;

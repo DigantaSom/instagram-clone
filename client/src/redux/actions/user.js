@@ -89,10 +89,6 @@ export const unfollowUser = unfollowId => async dispatch => {
   const body = JSON.stringify({ unfollowId });
   try {
     const res = await axios.put('/api/users/unfollow', body, config);
-    // dispatch({
-    //   type: FOLLOW_UNFOLLOW,
-    //   payload: res.data.followers,
-    // });
     dispatch({
       type: UNFOLLOW,
       payload: res.data.followers,
@@ -103,8 +99,5 @@ export const unfollowUser = unfollowId => async dispatch => {
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 6000)));
     }
-    // dispatch({
-    //   type: USER_ERROR,
-    // });
   }
 };

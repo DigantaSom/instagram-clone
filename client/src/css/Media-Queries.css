@@ -64,12 +64,16 @@
 }
 
 @media screen and (max-width: 500px) {
-  /* ------------------------ General ------------------------ */
+  /* ---------------- General ---------------- */
   .container {
     max-width: 90%;
     margin: 1.4rem auto;
   }
-  /* ------------------------ Profile ------------------------ */
+  /* ---------------- Navbar ---------------- */
+  .profile-logo-menu {
+    width: 130px;
+  }
+  /* ---------------- Profile ---------------- */
   /* .profile-top {
         margin: 2rem -5rem;
     } */
@@ -80,7 +84,11 @@
 }
 
 @media screen and (max-width: 370px) {
-  /* ---------------------------------------------------- User Posts ---------------------------------------------------- */
+  /* ---------------- Navbar ---------------- */
+  .profile-logo-menu {
+    width: 105px;
+  }
+  /* ---------------- User Posts ---------------- */
   .userpost-container {
     grid-template-columns: repeat(2, 1fr);
   }
