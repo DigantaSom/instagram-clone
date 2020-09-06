@@ -17,6 +17,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import Landing from './components/layout/Landing';
 import CreatePost from './components/post-forms/CreatePost';
 import Profile from './components/profile/Profile';
+import SinglePostPage from './components/posts/SinglePostPage';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -39,10 +40,11 @@ const App = () => {
           <Alert />
           <PrivateRoute exact path='/' component={Landing} />
           <Switch>
-            <Route path='/login' component={Login} />
-            <Route path='/register' component={Register} />
-            <PrivateRoute path='/create-post' component={CreatePost} />
-            <PrivateRoute path='/:user_id' component={Profile} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/register' component={Register} />
+            <PrivateRoute exact path='/create-post' component={CreatePost} />
+            <PrivateRoute exact path='/:user_id' component={Profile} />
+            <PrivateRoute exact path='/p/:post_id' component={SinglePostPage} />
           </Switch>
         </section>
       </Router>

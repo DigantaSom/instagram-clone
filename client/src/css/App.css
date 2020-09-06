@@ -41,6 +41,15 @@ ul {
   color: red;
 }
 
+/* padding */
+.p-1 {
+  padding: 1rem;
+}
+
+/* margin */
+.m-1 {
+  margin: 1rem;
+}
 .my-1 {
   margin: 1rem 0;
 }
@@ -338,8 +347,9 @@ nav {
   font-size: 1.45rem;
   cursor: pointer;
 }
-/* when like a post */
-.postLiked {
+/* when like a post or a comment */
+.postLiked,
+.commentLiked {
   color: red;
   -webkit-text-stroke-width: 1px;
 }
@@ -480,4 +490,90 @@ nav {
 .userpost-img-container img {
   width: 100%;
   height: 100%;
+}
+
+/* --------------------- Single Post page --------------------- */
+
+.single-post-container {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  /* align-items: center; */
+}
+
+.single-post-details {
+  padding-left: 0.5rem;
+}
+
+.single-post-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.single-post-info p {
+  font-weight: bold;
+}
+
+.single-post-info img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+/* -------- Single Post page (Comments) -------- */
+.single-post-comments {
+  padding: 0.5rem 0 0.3rem;
+  font-size: 0.9rem;
+}
+.single-post-comment-item-inner {
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.9rem 0.4rem;
+}
+.single-post-comment-item-inner:hover .comment-like .options {
+  display: block;
+}
+.single-post-dp-comment {
+  display: flex;
+  /* align-items: center; */
+  width: 80%;
+}
+.comment-text {
+  word-wrap: break-word;
+  width: 100%;
+  align-items: center;
+}
+.comment-dp img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+}
+.comment-like {
+  display: flex;
+  align-items: center;
+}
+.comment-like .options {
+  display: none;
+  color: #666666;
+}
+.small-like-btn {
+  font-size: 0.57rem;
+  -webkit-text-stroke-width: 1px;
+  padding-right: 0;
+  padding-left: 0.4rem;
+}
+
+.comment-others {
+  /* border: 1px solid yellowgreen; */
+  color: #666666;
+  display: flex;
+  align-items: center;
+  margin: -0.9rem 0.4rem 1rem;
+}
+/* reply button */
+.comment-others p {
+  margin-left: 1rem;
 }

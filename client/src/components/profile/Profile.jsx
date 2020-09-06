@@ -73,7 +73,10 @@ const Profile = ({
                     <button
                       className='btn follow-btn'
                       onClick={() => followUserHandler(_id)}>
-                      {following && following.some(f => f === auth.user._id)
+                      {following &&
+                      auth &&
+                      auth.user &&
+                      following.some(f => f === auth.user._id)
                         ? 'Follow Back'
                         : 'Follow'}
                     </button>

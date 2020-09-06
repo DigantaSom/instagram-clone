@@ -23,4 +23,8 @@ export const POST_ERROR = 'POST_ERROR';
 export const CLEAR_POSTS = 'CLEAR_POSTS';
 export const CLEAR_USER_POSTS = 'CLEAR_USER_POSTS';
 export const DELETE_POST = 'DELETE_POST';
-export const UPDATE_LIKE_ON_POST = 'UPDATE_LIKE_ON_POST';
+export const UPDATE_LIKE_ON_POST = 'UPDATE_LIKE_ON_POST'; // to like, unlike a post
+
+export const ADD_COMMENT = 'ADD_COMMENT';
+export const REMOVE_COMMENT = 'REMOVE_COMMENT';
+export const UPDATE_LIKE_ON_COMMENT = 'UPDATE_LIKE_ON_COMMENT'; // to like, unlike a comment

@@ -10,6 +10,9 @@ import {
   GET_POST,
   DELETE_POST,
   UPDATE_LIKE_ON_POST,
+  ADD_COMMENT,
+  REMOVE_COMMENT,
+  UPDATE_LIKE_ON_COMMENT,
 } from './type';
 
 // Get all posts of all users
@@ -52,7 +55,7 @@ export const getPostsOfMeAndWhomImFollowing = () => async dispatch => {
 
 export const getPostByPostId = post_id => async dispatch => {
   try {
-    const res = await axios.get(`/api/posts/${post_id}`);
+    const res = await axios.get(`/api/posts/p/${post_id}`);
     dispatch({
       type: GET_POST,
       payload: res.data, // the post by it's post_id
@@ -109,13 +112,13 @@ export const getPostsOfUser = user_id => async dispatch => {
       payload: res.data, // all posts of specific user
     });
   } catch (err) {
-    dispatch({
-      type: POST_ERROR,
-      payload: {
-        msg: err.response.statusText,
-        status: err.response.status,
-      },
-    });
+    // dispatch({
+    //   type: POST_ERROR,
+    //   payload: {
+    //     msg: err.response.statusText,
+    //     status: err.response.status,
+    //   },
+    // });
   }
 };
 
@@ -183,6 +186,90 @@ export const unlikePost = post_id => async dispatch => {
       payload: {
         post_id,
         likes: res.data,
+      },
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};
+
+// Add a comment to a specific post
+export const addComment = (post_id, comment) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ text: comment });
+    const res = await axios.put(`/api/posts/comment/${post_id}`, body, config);
+    dispatch({
+      type: ADD_COMMENT,
+      payload: {
+        post_id,
+        comments: res.data, // all comments on this post of post_id
+      },
+    });
+    dispatch(setAlert('Comment Added!', 'success', 4000));
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger', 6000)));
+    }
+    dispatch({
+      type: POST_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};
+
+// Delete a specific comment to a specific post
+export const deleteComment = (post_id, comment_id) => async dispatch => {
+  if (window.confirm('Are you sure you want to delete this comment?')) {
+    try {
+      await axios.delete(`/api/posts/comment/${post_id}/${comment_id}`);
+      dispatch({
+        type: REMOVE_COMMENT,
+        payload: {
+          post_id,
+          comment_id,
+        },
+      });
+    } catch (err) {
+      dispatch({
+        type: POST_ERROR,
+        payload: {
+          msg: err.response.statusText,
+          status: err.response.status,
+        },
+      });
+    }
+  }
+};
+
+export const likeOrUnlikeComment = (
+  post_id,
+  comment_id,
+  likeOrUnlike
+) => async dispatch => {
+  try {
+    const res = await axios.put(
+      `/api/posts/comment/${likeOrUnlike}/${post_id}/${comment_id}`
+    );
+    dispatch({
+      type: UPDATE_LIKE_ON_COMMENT,
+      payload: {
+        comment_id,
+        comment_likes: res.data,
       },
     });
   } catch (err) {

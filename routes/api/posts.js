@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/check-auth');
-const mongoose = require('mongoose');
 
 const Post = require('../../models/Post');
 const User = require('../../models/User');
@@ -106,7 +105,10 @@ router.get('/:user_id', async (req, res) => {
 // @access  Public
 router.get('/p/:post_id', async (req, res) => {
   try {
-    const post = await Post.findById(req.params.post_id);
+    const post = await Post.findById(req.params.post_id).populate('user', [
+      'username',
+      'dp',
+    ]);
     if (!post) {
       return res.status(404).json({
         msg: 'No post found',
@@ -114,7 +116,6 @@ router.get('/p/:post_id', async (req, res) => {
     }
     res.status(200).json(post);
   } catch (err) {
-    // console.log(err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -172,7 +173,7 @@ router.put('/p/unlike/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
     // check if the post hasn't even been liked yet by the user
-    if (post.likes.some(like => like.user.toString() !== req.user.id)) {
+    if (!post.likes.some(like => like.user.toString() === req.user.id)) {
       return res.status(400).json({
         msg: "Post hasn't been liked yet",
       });
@@ -182,6 +183,142 @@ router.put('/p/unlike/:post_id', auth, async (req, res) => {
 
     await post.save();
     res.status(200).json(post.likes);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET /api/posts/comments/:post_id
+// @desc    Get all comments of a post by post_id
+// @access  Private
+router.get('/comments/:post_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    if (!post) {
+      return res.status(404).json({
+        msg: 'Post not found',
+      });
+    }
+    res.status(200).json(post.comments);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT /api/posts/comment/:post_id
+// @desc    Comment on a post
+// @access  Private
+router.put(
+  '/comment/:post_id',
+  [auth, [check('text', 'Text is required').not().isEmpty()]],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+
+    try {
+      const post = await Post.findById(req.params.post_id);
+      const user = await User.findById(req.user.id).select('-password');
+
+      const newComment = {
+        user: req.user.id,
+        text: req.body.text,
+        username: user.username,
+        dp: user.dp,
+      };
+      post.comments.unshift(newComment);
+      await post.save();
+
+      res.status(200).json(post.comments);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route   DELETE /api/posts/comment/:post_id/:comment_id
+// @desc    Delete a comment of a post
+// @access  Private
+router.delete('/comment/:post_id/:comment_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const comment = post.comments.find(
+      com => com._id.toString() === req.params.comment_id
+    );
+    if (!comment) {
+      return res.status(404).json({ msg: 'Comment does not exist' });
+    }
+    // Check if the user that's deleting the comment is the owner of the comment
+    if (comment.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'User not authorized' });
+    }
+    // if everything's okay, then delete the comment
+    post.comments = post.comments.filter(
+      com => com._id.toString() !== req.params.comment_id
+    );
+    await post.save();
+
+    res.status(200).json(post.comments);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT /api/posts/comment/like/:post_id/:comment_id
+// @desc    Like a comment on a post
+// @access  Private
+router.put('/comment/like/:post_id/:comment_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const comment = post.comments.find(
+      com => com._id.toString() === req.params.comment_id
+    );
+    // check if the post has already been liked by the same user
+    if (comment.comment_likes.some(like => like.user.toString() === req.user.id)) {
+      return res.status(400).json({
+        msg: 'Comment already liked',
+      });
+    }
+    // if all's okay, then like the post
+    comment.comment_likes.unshift({ user: req.user.id });
+
+    await post.save();
+    res.status(200).json(comment.comment_likes);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   PUT /api/posts/comment/unlike/:post_id/:comment_id
+// @desc    Unlike a comment on a post
+// @access  Private
+router.put('/comment/unlike/:post_id/:comment_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const comment = post.comments.find(
+      com => com._id.toString() === req.params.comment_id
+    );
+    // // check if the comment hasn't even been liked yet by the user
+    if (!comment.comment_likes.some(like => like.user.toString() === req.user.id)) {
+      return res.status(400).json({
+        msg: "Comment hasn't been liked yet",
+      });
+    }
+    // if all's okay, then remove the like from the comment
+    comment.comment_likes = comment.comment_likes.filter(
+      like => like.user.toString() !== req.user.id
+    );
+    await post.save();
+
+    res.status(200).json(comment.comment_likes);
   } catch (err) {
     console.log(err.message);
     res.status(500).send('Server Error');
