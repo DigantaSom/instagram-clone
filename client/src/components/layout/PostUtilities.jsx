@@ -75,7 +75,7 @@ const PostUtilities = ({
           </p>
         )}
       </div>
-      <div className='add-comment'>
+      <form className='add-comment' onSubmit={e => e.preventDefault()}>
         <input
           type='text'
           placeholder='Add a comment...'
@@ -89,7 +89,7 @@ const PostUtilities = ({
           onClick={() => addCommentHandler(post_id, comment)}>
           Post
         </button>
-      </div>
+      </form>
     </Fragment>
   );
 };

@@ -524,6 +524,8 @@ nav {
 .single-post-comments {
   padding: 0.5rem 0 0.3rem;
   font-size: 0.9rem;
+  height: 25vh;
+  overflow-y: scroll;
 }
 .single-post-comment-item-inner {
   /* border: 1px solid red; */
